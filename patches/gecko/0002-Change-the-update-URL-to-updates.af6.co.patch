@@ -1,0 +1,25 @@
+From 7635940c6c277f4cd4bec5bd474cda2c20e62e30 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Mon, 21 Jul 2014 22:51:31 +0200
+Subject: [PATCH] Change the update URL to updates.af6.co
+
+---
+ b2g/app/b2g.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/b2g/app/b2g.js b/b2g/app/b2g.js
+index dc3c934..ef7d7b2 100644
+--- a/b2g/app/b2g.js
++++ b/b2g/app/b2g.js
+@@ -565,7 +565,7 @@ pref("app.update.incompatible.mode", 0);
+ pref("app.update.staging.enabled", true);
+ pref("app.update.service.enabled", true);
+ 
+-pref("app.update.url", "https://aus4.mozilla.org/update/3/%PRODUCT%/%VERSION%/%BUILD_ID%/%PRODUCT_DEVICE%/%LOCALE%/%CHANNEL%/%OS_VERSION%/%DISTRIBUTION%/%DISTRIBUTION_VERSION%/update.xml");
++pref("app.update.url", "http://updates.af6.co/%PRODUCT%/%PRODUCT_DEVICE%/%CHANNEL%/%BUILD_ID%/update.xml");
+ pref("app.update.channel", "@MOZ_UPDATE_CHANNEL@");
+ 
+ // Interval at which update manifest is fetched.  In units of seconds.
+-- 
+1.9.1
+
