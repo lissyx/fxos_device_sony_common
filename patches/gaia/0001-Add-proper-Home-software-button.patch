@@ -1,0 +1,149 @@
+From 984e2fb1f04c98a980131a44424223f1ca8d9a38 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 18 Jul 2014 19:29:36 +0200
+Subject: [PATCH 1/3] Add proper Home software button
+
+---
+ .../style/software_button_manager/images/home_126.png    | Bin 0 -> 3099 bytes
+ .../style/software_button_manager/images/home_84.png     | Bin 0 -> 2328 bytes
+ .../software_button_manager/software_button_manager.css  |   4 ++--
+ 3 files changed, 2 insertions(+), 2 deletions(-)
+ create mode 100644 apps/system/style/software_button_manager/images/home_126.png
+ create mode 100644 apps/system/style/software_button_manager/images/home_84.png
+
+diff --git a/apps/system/style/software_button_manager/images/home_126.png b/apps/system/style/software_button_manager/images/home_126.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..90631351b48f9641ae1e002f3307de44dbda956a
+GIT binary patch
+literal 3099
+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
+Q>%Z&Hj&6is@F9Z#0gf1Hxc~qF
+
+literal 0
+HcmV?d00001
+
+diff --git a/apps/system/style/software_button_manager/images/home_84.png b/apps/system/style/software_button_manager/images/home_84.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..4df0bd8b11df2d75da2f620746ea0f2c6bc1238a
+GIT binary patch
+literal 2328
+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
+YE4)Q-X`0O2J$F}Ox_U9nwudYK3sis9#sB~S
+
+literal 0
+HcmV?d00001
+
+diff --git a/apps/system/style/software_button_manager/software_button_manager.css b/apps/system/style/software_button_manager/software_button_manager.css
+index afb4cd1..ee176a4 100644
+--- a/apps/system/style/software_button_manager/software_button_manager.css
++++ b/apps/system/style/software_button_manager/software_button_manager.css
+@@ -30,14 +30,14 @@
+ @media (min-resolution: 1.5dppx) {
+   #software-home-button,
+   #fullscreen-software-home-button {
+-    background: transparent url(/shared/resources/branding/browser_84.png) no-repeat center center / 3.6rem;
++    background: transparent url(images/home_84.png) no-repeat center center / 3.6rem;
+   }
+ }
+ 
+ @media (min-resolution: 2dppx) {
+   #software-home-button,
+   #fullscreen-software-home-button {
+-    background: transparent url(/shared/resources/branding/browser_126.png) no-repeat center center / 3.6rem;
++    background: transparent url(images/home_126.png) no-repeat center center / 3.6rem;
+   }
+ }
+ 
+-- 
+1.9.1
+
