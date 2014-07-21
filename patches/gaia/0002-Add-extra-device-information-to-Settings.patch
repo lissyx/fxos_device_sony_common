@@ -1,0 +1,49 @@
+From 7f11595ff5da2a2a889bfc01f791334589615704 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Sun, 20 Jul 2014 14:19:58 +0200
+Subject: [PATCH 2/3] Add extra device information to Settings
+
+---
+ apps/settings/elements/about.html           | 6 +++++-
+ apps/settings/elements/about_more_info.html | 8 ++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/apps/settings/elements/about.html b/apps/settings/elements/about.html
+index 959068c..a7bf9a9 100644
+--- a/apps/settings/elements/about.html
++++ b/apps/settings/elements/about.html
+@@ -13,7 +13,11 @@
+           <small id="deviceInfo-msisdns"></small>
+         </li>
+         <li>
+-          <small data-name="deviceinfo.hardware"></small>
++          <small data-name="deviceinfo.product_manufacturer"></small>
++          <span id="model-manufacturer" data-l10n-id="model-manufacturer"> Manufacturer </span>
++        </li>
++        <li>
++          <small data-name="deviceinfo.product_model"></small>
+           <span id="model-name" data-l10n-id="model-name"> Model </span>
+         </li>
+         <li>
+diff --git a/apps/settings/elements/about_more_info.html b/apps/settings/elements/about_more_info.html
+index 11de6a3..6a9bdeb 100644
+--- a/apps/settings/elements/about_more_info.html
++++ b/apps/settings/elements/about_more_info.html
+@@ -23,6 +23,14 @@
+           <span data-l10n-id="hardware_revision"> Hardware Revision </span>
+         </li>
+         <li>
++          <small data-name="deviceinfo.hardware_chipset"></small>
++          <span data-l10n-id="hardware_chipset"> Hardware Chipset </span>
++        </li>
++        <li>
++          <small data-name="deviceinfo.hardware_codename"></small>
++          <span data-l10n-id="hardware_codename"> Hardware Codename </span>
++        </li>
++        <li>
+           <small data-name="deviceinfo.mac"></small>
+           <span data-l10n-id="macAddress"> MAC address </span>
+         </li>
+-- 
+1.9.1
+

@@ -1,0 +1,38 @@
+From bef64c8fe80eea648be6bf46ba6b798f57b4d883 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Sun, 20 Jul 2014 14:17:57 +0200
+Subject: [PATCH 1/2] Add extra device information to Settings
+
+---
+ b2g/chrome/content/settings.js | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/b2g/chrome/content/settings.js b/b2g/chrome/content/settings.js
+index d69e7cf..769a7589 100644
+--- a/b2g/chrome/content/settings.js
++++ b/b2g/chrome/content/settings.js
+@@ -151,7 +151,10 @@ Components.utils.import('resource://gre/modules/ctypes.jsm');
+   let product_model = null;
+ #ifdef MOZ_WIDGET_GONK
+     hardware_info = libcutils.property_get('ro.hardware');
++    hardware_chipset = libcutils.property_get('ro.board.platform');
++    hardware_codename = libcutils.property_get('ro.product.device');
+     firmware_revision = libcutils.property_get('ro.firmware_revision');
++    product_manufacturer = libcutils.property_get('ro.product.brand');
+     product_model = libcutils.property_get('ro.product.model');
+ #endif
+ 
+@@ -162,7 +165,10 @@ Components.utils.import('resource://gre/modules/ctypes.jsm');
+     'deviceinfo.platform_version': appInfo.platformVersion,
+     'deviceinfo.platform_build_id': appInfo.platformBuildID,
+     'deviceinfo.hardware': hardware_info,
++    'deviceinfo.hardware_chipset': hardware_chipset,
++    'deviceinfo.hardware_codename': hardware_codename,
+     'deviceinfo.firmware_revision': firmware_revision,
++    'deviceinfo.product_manufacturer': product_manufacturer,
+     'deviceinfo.product_model': product_model
+   }
+   window.navigator.mozSettings.createLock().set(setting);
+-- 
+1.9.1
+
