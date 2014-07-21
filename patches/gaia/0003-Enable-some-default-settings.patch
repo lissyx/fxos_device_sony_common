@@ -1,0 +1,52 @@
+From dcea4fc06c1b629b8d25d1d498a43b44cd9293a6 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Sun, 20 Jul 2014 14:22:31 +0200
+Subject: [PATCH 3/3] Enable some default settings
+
+---
+ build/config/common-settings.json | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/build/config/common-settings.json b/build/config/common-settings.json
+index 1b17cd8..e3cce5b 100644
+--- a/build/config/common-settings.json
++++ b/build/config/common-settings.json
+@@ -23,7 +23,7 @@
+    "audio.volume.telephony": 5,
+    "audio.volume.cemaxvol": 11,
+    "bluetooth.enabled": false,
+-   "bluetooth.debugging.enabled": false,
++   "bluetooth.debugging.enabled": true,
+    "bluetooth.suspended": false,
+    "camera.sound.enabled": true,
+    "camera.recording.preferredSizes": [],
+@@ -108,7 +108,7 @@
+    "notifications.resend": true,
+    "lockscreen.enabled": true,
+    "lockscreen.locked": true,
+-   "lockscreen.unlock-sound.enabled": false,
++   "lockscreen.unlock-sound.enabled": true,
+    "message.sent-sound.enabled": true,
+    "nfc.enabled": false,
+    "nfc.suspended": false,
+@@ -131,7 +131,7 @@
+    "ril.cellbroadcast.searchlist": "",
+    "ril.callwaiting.enabled": null,
+    "ril.cf.enabled": false,
+-   "ril.data.enabled": false,
++   "ril.data.enabled": true,
+    "ril.data.apn": "",
+    "ril.data.carrier": "",
+    "ril.data.passwd": "",
+@@ -173,7 +173,7 @@
+    "ril.callerId": "CLIR_DEFAULT",
+    "rocketbar.enabled": false,
+    "everythingme.api.url": "https://api.everything.me/partners/1.0/{resource}/",
+-   "screen.automatic-brightness": false,
++   "screen.automatic-brightness": true,
+    "screen.brightness": 1,
+    "screen.timeout": 60,
+    "search.suggestions.enabled": true,
+-- 
+1.9.1
+
