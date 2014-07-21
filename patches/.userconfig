@@ -1,0 +1,15 @@
+## Gaia
+export LOCALE_BASEDIR=/media/adfad666/LinStore/B2G/gaia-l10n
+export LOCALES_FILE=/media/adfad666/LinStore/B2G/device/sony/common/patches/gaia/languages_own.json
+export GAIA_KEYBOARD_LAYOUTS=en,cs,de,el,hr,hu,nl,pl,pt-BR,ro,ru,sk
+
+## Gecko
+export L10NBASEDIR=/media/adfad666/LinStore/B2G/gecko-l10n
+export MOZ_CHROME_MULTILOCALE="en-US cs de el hr hu nl pl pt-BR ro ru sk tr"
+export PATH="$PATH:/media/adfad666/LinStore/B2G/compare-locales/scripts"
+export PYTHONPATH="/media/adfad666/LinStore/B2G/compare-locales/lib"
+
+## OTA Updates
+VARIANT=userdebug
+B2G_UPDATER=1
+
