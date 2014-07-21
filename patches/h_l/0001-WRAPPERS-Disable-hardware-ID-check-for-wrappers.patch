@@ -1,0 +1,30 @@
+From 4fec4d5f4f88802280b06dbbac392a453adfc24b Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Thu, 10 Jul 2014 10:12:59 +0200
+Subject: [PATCH] WRAPPERS: Disable hardware ID check for wrappers
+
+---
+ hardware.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/hardware.c b/hardware.c
+index 1f831cb..4c58e38 100644
+--- a/hardware.c
++++ b/hardware.c
+@@ -89,11 +89,13 @@ static int load(const char *id,
+     }
+ 
+     /* Check that the id matches */
++#ifndef DISABLE_HW_ID_MATCH_CHECK
+     if (strcmp(id, hmi->id) != 0) {
+         ALOGE("load: id=%s != hmi->id=%s", id, hmi->id);
+         status = -EINVAL;
+         goto done;
+     }
++#endif /* DISABLE_HW_ID_MATCH_CHECK */
+ 
+     hmi->dso = handle;
+ 
+-- 
+1.9.1
+
