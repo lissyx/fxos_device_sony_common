@@ -17,10 +17,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml
 
-# Boot Logo
-PRODUCT_COPY_FILES += \
-     device/sony/common/bootlogo/$(TARGET_SCREEN_WIDTH)x$(TARGET_SCREEN_HEIGHT).rle:root/logo.rle
-
 # Offline charging animation
 PRODUCT_COPY_FILES += \
      device/sony/common/animations/charging_animation_01.png:system/semc/chargemon/data/charging_animation_01.png \
