@@ -47,23 +47,6 @@ PRODUCT_COPY_FILES += \
     system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf \
     system/bluetooth/data/network.conf:system/etc/bluetooth/network.conf \
 
-# FxOS Properties
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.moz.has_home_button=0 \
-    ro.moz.ril.subscription_control=true
-
-# FxOS Bluedroid
-PRODUCT_PACKAGES += \
-    bluetooth.default
-
-# FxOS GPS
-PRODUCT_PACKAGES += \
-    libandroid_runtime
-
-# FxOS RIL
-PRODUCT_PACKAGES += \
-    rilproxy \
-
 # Audio
 PRODUCT_PACKAGES += \
     audio_policy.$(QCOM_CHIPSET_FAMILY) \
