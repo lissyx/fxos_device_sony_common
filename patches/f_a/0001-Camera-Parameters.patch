@@ -1,16 +1,16 @@
-From f98a1e1d5d75e5a23487bbe6966cd8702c069ec7 Mon Sep 17 00:00:00 2001
+From a73bdaf4e752b7cb135b50bdfe64739b7a8b16d3 Mon Sep 17 00:00:00 2001
 From: Adam Farden <adam@farden.cz>
 Date: Tue, 5 Aug 2014 00:37:44 +0200
 Subject: [PATCH] Camera Parameters
 
 Change-Id: I65627655b548a158f71136011f0be462e55b7303
 ---
- camera/CameraParameters.cpp       | 280 ++++++++++++++++++++++++++++++++++++++
+ camera/CameraParameters.cpp       | 279 ++++++++++++++++++++++++++++++++++++++
  include/camera/CameraParameters.h | 212 +++++++++++++++++++++++++++++
- 2 files changed, 492 insertions(+)
+ 2 files changed, 491 insertions(+)
 
 diff --git a/camera/CameraParameters.cpp b/camera/CameraParameters.cpp
-index d10f2e5..19f4d0b 100644
+index cd41a0f..0363da6 100644
 --- a/camera/CameraParameters.cpp
 +++ b/camera/CameraParameters.cpp
 @@ -26,12 +26,17 @@ namespace android {
@@ -87,7 +87,7 @@ index d10f2e5..19f4d0b 100644
  
  const char CameraParameters::TRUE[] = "true";
  const char CameraParameters::FALSE[] = "false";
-@@ -117,6 +153,14 @@ const char CameraParameters::EFFECT_WHITEBOARD[] = "whiteboard";
+@@ -118,6 +154,14 @@ const char CameraParameters::EFFECT_WHITEBOARD[] = "whiteboard";
  const char CameraParameters::EFFECT_BLACKBOARD[] = "blackboard";
  const char CameraParameters::EFFECT_AQUA[] = "aqua";
  
@@ -102,7 +102,7 @@ index d10f2e5..19f4d0b 100644
  // Values for antibanding settings.
  const char CameraParameters::ANTIBANDING_AUTO[] = "auto";
  const char CameraParameters::ANTIBANDING_50HZ[] = "50hz";
-@@ -146,11 +190,20 @@ const char CameraParameters::SCENE_MODE_FIREWORKS[] = "fireworks";
+@@ -147,11 +191,20 @@ const char CameraParameters::SCENE_MODE_FIREWORKS[] = "fireworks";
  const char CameraParameters::SCENE_MODE_SPORTS[] = "sports";
  const char CameraParameters::SCENE_MODE_PARTY[] = "party";
  const char CameraParameters::SCENE_MODE_CANDLELIGHT[] = "candlelight";
@@ -123,7 +123,7 @@ index d10f2e5..19f4d0b 100644
  const char CameraParameters::PIXEL_FORMAT_YUV422I[] = "yuv422i-yuyv";
  const char CameraParameters::PIXEL_FORMAT_YUV420P[]  = "yuv420p";
  const char CameraParameters::PIXEL_FORMAT_RGB565[] = "rgb565";
-@@ -158,6 +211,9 @@ const char CameraParameters::PIXEL_FORMAT_RGBA8888[] = "rgba8888";
+@@ -159,6 +212,9 @@ const char CameraParameters::PIXEL_FORMAT_RGBA8888[] = "rgba8888";
  const char CameraParameters::PIXEL_FORMAT_JPEG[] = "jpeg";
  const char CameraParameters::PIXEL_FORMAT_BAYER_RGGB[] = "bayer-rggb";
  const char CameraParameters::PIXEL_FORMAT_ANDROID_OPAQUE[] = "android-opaque";
@@ -133,10 +133,10 @@ index d10f2e5..19f4d0b 100644
  
  // Values for focus mode settings.
  const char CameraParameters::FOCUS_MODE_AUTO[] = "auto";
-@@ -167,6 +223,118 @@ const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
- const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
+@@ -169,6 +225,117 @@ const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
  const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
  const char CameraParameters::FOCUS_MODE_CONTINUOUS_PICTURE[] = "continuous-picture";
+ const char CameraParameters::FOCUS_MODE_MANUAL_POSITION[] = "manual";
 +const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 +
 +const char CameraParameters::KEY_SKIN_TONE_ENHANCEMENT[] = "skinToneEnhancement";
@@ -248,11 +248,10 @@ index d10f2e5..19f4d0b 100644
 +         set("orientation", landscape);
 +    }
 +}
-+
  
  // Values for light fx settings
  const char CameraParameters::LIGHTFX_LOWLIGHT[] = "low-light";
-@@ -318,6 +486,32 @@ static int parse_pair(const char *str, int *first, int *second, char delim,
+@@ -320,6 +487,32 @@ static int parse_pair(const char *str, int *first, int *second, char delim,
      return 0;
  }
  
@@ -285,7 +284,7 @@ index d10f2e5..19f4d0b 100644
  static void parseSizesList(const char *sizesStr, Vector<Size> &sizes)
  {
      if (sizesStr == 0) {
-@@ -373,6 +567,19 @@ void CameraParameters::getSupportedPreviewSizes(Vector<Size> &sizes) const
+@@ -375,6 +568,19 @@ void CameraParameters::getSupportedPreviewSizes(Vector<Size> &sizes) const
      parseSizesList(previewSizesStr, sizes);
  }
  
@@ -305,7 +304,7 @@ index d10f2e5..19f4d0b 100644
  void CameraParameters::setVideoSize(int width, int height)
  {
      char str[32];
-@@ -412,6 +619,16 @@ void CameraParameters::getPreviewFpsRange(int *min_fps, int *max_fps) const
+@@ -414,6 +620,16 @@ void CameraParameters::getPreviewFpsRange(int *min_fps, int *max_fps) const
      parse_pair(p, min_fps, max_fps, ',');
  }
  
@@ -322,7 +321,7 @@ index d10f2e5..19f4d0b 100644
  void CameraParameters::setPreviewFormat(const char *format)
  {
      set(KEY_PREVIEW_FORMAT, format);
-@@ -465,6 +682,69 @@ void CameraParameters::dump() const
+@@ -467,6 +683,69 @@ void CameraParameters::dump() const
      }
  }
  
@@ -393,7 +392,7 @@ index d10f2e5..19f4d0b 100644
  {
      const size_t SIZE = 256;
 diff --git a/include/camera/CameraParameters.h b/include/camera/CameraParameters.h
-index d521543..ce21533 100644
+index e517088..a68705a 100644
 --- a/include/camera/CameraParameters.h
 +++ b/include/camera/CameraParameters.h
 @@ -37,6 +37,20 @@ struct Size {
@@ -565,7 +564,7 @@ index d521543..ce21533 100644
      // Values for white balance settings.
      static const char WHITE_BALANCE_AUTO[];
      static const char WHITE_BALANCE_INCANDESCENT[];
-@@ -557,6 +649,14 @@ public:
+@@ -558,6 +650,14 @@ public:
      static const char EFFECT_BLACKBOARD[];
      static const char EFFECT_AQUA[];
  
@@ -580,7 +579,7 @@ index d521543..ce21533 100644
      // Values for antibanding settings.
      static const char ANTIBANDING_AUTO[];
      static const char ANTIBANDING_50HZ[];
-@@ -594,6 +694,9 @@ public:
+@@ -595,6 +695,9 @@ public:
      static const char SCENE_MODE_SPORTS[];
      static const char SCENE_MODE_PARTY[];
      static const char SCENE_MODE_CANDLELIGHT[];
@@ -590,7 +589,7 @@ index d521543..ce21533 100644
      // Applications are looking for a barcode. Camera driver will be optimized
      // for barcode reading.
      static const char SCENE_MODE_BARCODE[];
-@@ -604,8 +707,11 @@ public:
+@@ -605,8 +708,11 @@ public:
  
      // Pixel color formats for KEY_PREVIEW_FORMAT, KEY_PICTURE_FORMAT,
      // and KEY_VIDEO_FRAME_FORMAT
@@ -602,7 +601,7 @@ index d521543..ce21533 100644
      static const char PIXEL_FORMAT_YUV422I[]; // YUY2
      static const char PIXEL_FORMAT_YUV420P[]; // YV12
      static const char PIXEL_FORMAT_RGB565[];
-@@ -616,6 +722,9 @@ public:
+@@ -617,6 +723,9 @@ public:
      static const char PIXEL_FORMAT_BAYER_RGGB[];
      // Pixel format is not known to the framework
      static const char PIXEL_FORMAT_ANDROID_OPAQUE[];
@@ -612,7 +611,7 @@ index d521543..ce21533 100644
  
      // Values for focus mode settings.
      // Auto-focus mode. Applications should call
-@@ -674,6 +783,109 @@ public:
+@@ -677,6 +786,109 @@ public:
      // High-dynamic range mode
      static const char LIGHTFX_HDR[];
  
