@@ -1,0 +1,239 @@
+From 4ff7067e9ed3e3078024a8d53f5074b3f386cff0 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 8 Aug 2014 13:56:41 +0200
+Subject: [PATCH] PATCH: AOSP: Add QCOM extras to headers
+
+---
+ audio/AudioPolicyManagerBase.cpp            | 50 ++++++++++++++++++++++++++++-
+ include/hardware_legacy/AudioSystemLegacy.h | 49 ++++++++++++++++++++--------
+ 2 files changed, 85 insertions(+), 14 deletions(-)
+
+diff --git a/audio/AudioPolicyManagerBase.cpp b/audio/AudioPolicyManagerBase.cpp
+index bf3f36a..25a99b8 100644
+--- a/audio/AudioPolicyManagerBase.cpp
++++ b/audio/AudioPolicyManagerBase.cpp
+@@ -1,5 +1,7 @@
+ /*
+  * Copyright (C) 2009 The Android Open Source Project
++ * Copyright (c) 2013, The Linux Foundation. All rights reserved.
++ * Not a Contribution.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -1363,7 +1365,8 @@ AudioPolicyManagerBase::AudioPolicyManagerBase(AudioPolicyClientInterface *clien
+         {
+             const IOProfile *outProfile = mHwModules[i]->mOutputProfiles[j];
+ 
+-            if (outProfile->mSupportedDevices & mAttachedOutputDevices) {
++            if ( (outProfile->mSupportedDevices & mAttachedOutputDevices) &&
++                  !(outProfile->mFlags & AUDIO_OUTPUT_FLAG_DIRECT) ){
+                 AudioOutputDescriptor *outputDesc = new AudioOutputDescriptor(outProfile);
+                 outputDesc->mDevice = (audio_devices_t)(mDefaultOutputDevice &
+                                                             outProfile->mSupportedDevices);
+@@ -2088,6 +2091,7 @@ AudioPolicyManagerBase::routing_strategy AudioPolicyManagerBase::getStrategy(
+         // while key clicks are played produces a poor result
+     case AudioSystem::TTS:
+     case AudioSystem::MUSIC:
++    case AudioSystem::INCALL_MUSIC:
+         return STRATEGY_MEDIA;
+     case AudioSystem::ENFORCED_AUDIBLE:
+         return STRATEGY_ENFORCED_AUDIBLE;
+@@ -2744,6 +2748,11 @@ const AudioPolicyManagerBase::VolumeCurvePoint
+         sSpeakerMediaVolumeCurve, // DEVICE_CATEGORY_SPEAKER
+         sDefaultMediaVolumeCurve  // DEVICE_CATEGORY_EARPIECE
+     },
++    { // AUDIO_STREAM_INCALL_MUSIC
++        sDefaultMediaVolumeCurve, // DEVICE_CATEGORY_HEADSET
++        sSpeakerMediaVolumeCurve, // DEVICE_CATEGORY_SPEAKER
++        sDefaultMediaVolumeCurve  // DEVICE_CATEGORY_EARPIECE
++    },
+ };
+ 
+ void AudioPolicyManagerBase::initializeVolumeCurves()
+@@ -3429,6 +3438,8 @@ const struct StringToEnum sDeviceNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_SPEAKER),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_WIRED_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_WIRED_HEADPHONE),
++    STRING_TO_ENUM(AUDIO_DEVICE_OUT_ANC_HEADSET),
++    STRING_TO_ENUM(AUDIO_DEVICE_OUT_ANC_HEADPHONE),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_ALL_SCO),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_ALL_A2DP),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_AUX_DIGITAL),
+@@ -3436,18 +3447,26 @@ const struct StringToEnum sDeviceNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_USB_DEVICE),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_USB_ACCESSORY),
++    STRING_TO_ENUM(AUDIO_DEVICE_OUT_FM),
++    STRING_TO_ENUM(AUDIO_DEVICE_OUT_FM_TX),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_ALL_USB),
++    STRING_TO_ENUM(AUDIO_DEVICE_OUT_PROXY),
+     STRING_TO_ENUM(AUDIO_DEVICE_OUT_REMOTE_SUBMIX),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_BUILTIN_MIC),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_WIRED_HEADSET),
++    STRING_TO_ENUM(AUDIO_DEVICE_IN_ANC_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_AUX_DIGITAL),
++    STRING_TO_ENUM(AUDIO_DEVICE_IN_FM_RX),
++    STRING_TO_ENUM(AUDIO_DEVICE_IN_FM_RX_A2DP),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_VOICE_CALL),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_BACK_MIC),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_REMOTE_SUBMIX),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_ANLG_DOCK_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_DGTL_DOCK_HEADSET),
+     STRING_TO_ENUM(AUDIO_DEVICE_IN_USB_ACCESSORY),
++    STRING_TO_ENUM(AUDIO_DEVICE_IN_PROXY),
++    STRING_TO_ENUM(AUDIO_DEVICE_IN_COMMUNICATION),
+ };
+ 
+ const struct StringToEnum sFlagNameToEnumTable[] = {
+@@ -3455,6 +3474,10 @@ const struct StringToEnum sFlagNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_PRIMARY),
+     STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_FAST),
+     STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_DEEP_BUFFER),
++    STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_VOIP_RX),
++    STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_LPA),
++    STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_TUNNEL),
++    STRING_TO_ENUM(AUDIO_OUTPUT_FLAG_INCALL_MUSIC),
+ };
+ 
+ const struct StringToEnum sFormatNameToEnumTable[] = {
+@@ -3463,12 +3486,33 @@ const struct StringToEnum sFormatNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_FORMAT_MP3),
+     STRING_TO_ENUM(AUDIO_FORMAT_AAC),
+     STRING_TO_ENUM(AUDIO_FORMAT_VORBIS),
++    STRING_TO_ENUM(AUDIO_FORMAT_AC3),
++    STRING_TO_ENUM(AUDIO_FORMAT_EAC3),
++    STRING_TO_ENUM(AUDIO_FORMAT_DTS),
++    STRING_TO_ENUM(AUDIO_FORMAT_DTS_LBR),
++    STRING_TO_ENUM(AUDIO_FORMAT_WMA),
++    STRING_TO_ENUM(AUDIO_FORMAT_WMA_PRO),
++    STRING_TO_ENUM(AUDIO_FORMAT_AAC_ADIF),
++    STRING_TO_ENUM(AUDIO_FORMAT_AMR_NB),
++    STRING_TO_ENUM(AUDIO_FORMAT_AMR_WB),
++    STRING_TO_ENUM(AUDIO_FORMAT_AMR_WB_PLUS),
++    STRING_TO_ENUM(AUDIO_FORMAT_EVRC),
++    STRING_TO_ENUM(AUDIO_FORMAT_EVRCB),
++    STRING_TO_ENUM(AUDIO_FORMAT_EVRCWB),
++    STRING_TO_ENUM(AUDIO_FORMAT_QCELP),
++    STRING_TO_ENUM(AUDIO_FORMAT_MP2),
++    STRING_TO_ENUM(AUDIO_FORMAT_EVRCNW),
+ };
+ 
+ const struct StringToEnum sOutChannelsNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_CHANNEL_OUT_MONO),
+     STRING_TO_ENUM(AUDIO_CHANNEL_OUT_STEREO),
++    STRING_TO_ENUM(AUDIO_CHANNEL_OUT_2POINT1),
++    STRING_TO_ENUM(AUDIO_CHANNEL_OUT_QUAD),
++    STRING_TO_ENUM(AUDIO_CHANNEL_OUT_SURROUND),
++    STRING_TO_ENUM(AUDIO_CHANNEL_OUT_PENTA),
+     STRING_TO_ENUM(AUDIO_CHANNEL_OUT_5POINT1),
++    STRING_TO_ENUM(AUDIO_CHANNEL_OUT_6POINT1),
+     STRING_TO_ENUM(AUDIO_CHANNEL_OUT_7POINT1),
+ };
+ 
+@@ -3476,6 +3520,10 @@ const struct StringToEnum sInChannelsNameToEnumTable[] = {
+     STRING_TO_ENUM(AUDIO_CHANNEL_IN_MONO),
+     STRING_TO_ENUM(AUDIO_CHANNEL_IN_STEREO),
+     STRING_TO_ENUM(AUDIO_CHANNEL_IN_FRONT_BACK),
++    STRING_TO_ENUM(AUDIO_CHANNEL_IN_5POINT1),
++    STRING_TO_ENUM(AUDIO_CHANNEL_IN_VOICE_CALL_MONO),
++    STRING_TO_ENUM(AUDIO_CHANNEL_IN_VOICE_DNLINK_MONO),
++    STRING_TO_ENUM(AUDIO_CHANNEL_IN_VOICE_UPLINK_MONO),
+ };
+ 
+ 
+diff --git a/include/hardware_legacy/AudioSystemLegacy.h b/include/hardware_legacy/AudioSystemLegacy.h
+index 6296b8b..39d552a 100644
+--- a/include/hardware_legacy/AudioSystemLegacy.h
++++ b/include/hardware_legacy/AudioSystemLegacy.h
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright (C) 2008 The Android Open Source Project
++ * Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -61,7 +62,10 @@ enum audio_source {
+     AUDIO_SOURCE_CAMCORDER = 5,
+     AUDIO_SOURCE_VOICE_RECOGNITION = 6,
+     AUDIO_SOURCE_VOICE_COMMUNICATION = 7,
+-    AUDIO_SOURCE_MAX = AUDIO_SOURCE_VOICE_COMMUNICATION,
++    AUDIO_SOURCE_REMOTE_SUBMIX = 8,
++    AUDIO_SOURCE_FM_RX = 9,
++    AUDIO_SOURCE_FM_RX_A2DP = 10,
++    AUDIO_SOURCE_MAX = AUDIO_SOURCE_FM_RX_A2DP,
+ 
+     AUDIO_SOURCE_LIST_END  // must be last - used to validate audio source type
+ };
+@@ -81,6 +85,7 @@ public:
+         ENFORCED_AUDIBLE = 7, // Sounds that cannot be muted by user and must be routed to speaker
+         DTMF             = 8,
+         TTS              = 9,
++        INCALL_MUSIC     = 10,
+         NUM_STREAM_TYPES
+     };
+ 
+@@ -243,30 +248,48 @@ public:
+         DEVICE_OUT_AUX_DIGITAL = 0x400,
+         DEVICE_OUT_ANLG_DOCK_HEADSET = 0x800,
+         DEVICE_OUT_DGTL_DOCK_HEADSET = 0x1000,
+-        DEVICE_OUT_DEFAULT = 0x8000,
++        DEVICE_OUT_USB_ACCESSORY = 0x2000,
++        DEVICE_OUT_USB_DEVICE = 0x4000,
++        DEVICE_OUT_FM = 0x8000,
++        DEVICE_OUT_FM_TX = 0x10000,
++        DEVICE_OUT_ANC_HEADSET = 0x20000,
++        DEVICE_OUT_ANC_HEADPHONE = 0x40000,
++        DEVICE_OUT_PROXY = 0x80000,
++        DEVICE_OUT_DEFAULT = DEVICE_OUT_SPEAKER,
+         DEVICE_OUT_ALL = (DEVICE_OUT_EARPIECE | DEVICE_OUT_SPEAKER | DEVICE_OUT_WIRED_HEADSET |
+                 DEVICE_OUT_WIRED_HEADPHONE | DEVICE_OUT_BLUETOOTH_SCO | DEVICE_OUT_BLUETOOTH_SCO_HEADSET |
+                 DEVICE_OUT_BLUETOOTH_SCO_CARKIT | DEVICE_OUT_BLUETOOTH_A2DP | DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
+                 DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER | DEVICE_OUT_AUX_DIGITAL |
+                 DEVICE_OUT_ANLG_DOCK_HEADSET | DEVICE_OUT_DGTL_DOCK_HEADSET |
+-                DEVICE_OUT_DEFAULT),
++                DEVICE_OUT_USB_ACCESSORY | DEVICE_OUT_USB_DEVICE |
++                DEVICE_OUT_ANC_HEADSET | DEVICE_OUT_ANC_HEADPHONE |
++                DEVICE_OUT_FM | DEVICE_OUT_FM_TX |
++                DEVICE_OUT_PROXY | DEVICE_OUT_DEFAULT),
+         DEVICE_OUT_ALL_A2DP = (DEVICE_OUT_BLUETOOTH_A2DP | DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
+                 DEVICE_OUT_BLUETOOTH_A2DP_SPEAKER),
++        DEVICE_OUT_ALL_USB = (DEVICE_OUT_USB_ACCESSORY | DEVICE_OUT_USB_DEVICE),
+ 
+         // input devices
+-        DEVICE_IN_COMMUNICATION = 0x10000,
+-        DEVICE_IN_AMBIENT = 0x20000,
+-        DEVICE_IN_BUILTIN_MIC = 0x40000,
+-        DEVICE_IN_BLUETOOTH_SCO_HEADSET = 0x80000,
+-        DEVICE_IN_WIRED_HEADSET = 0x100000,
+-        DEVICE_IN_AUX_DIGITAL = 0x200000,
+-        DEVICE_IN_VOICE_CALL = 0x400000,
+-        DEVICE_IN_BACK_MIC = 0x800000,
+-        DEVICE_IN_DEFAULT = 0x80000000,
++        DEVICE_IN_COMMUNICATION = 0x100000,
++        DEVICE_IN_AMBIENT = 0x200000,
++        DEVICE_IN_BUILTIN_MIC = 0x400000,
++        DEVICE_IN_BLUETOOTH_SCO_HEADSET = 0x800000,
++        DEVICE_IN_WIRED_HEADSET = 0x1000000,
++        DEVICE_IN_AUX_DIGITAL = 0x2000000,
++        DEVICE_IN_VOICE_CALL = 0x4000000,
++        DEVICE_IN_BACK_MIC = 0x8000000,
++        DEVICE_IN_ANC_HEADSET = 0x10000000,
++        DEVICE_IN_FM_RX = 0x20000000,
++        DEVICE_IN_FM_RX_A2DP = 0x40000000,
++        DEVICE_IN_DEFAULT = DEVICE_IN_BUILTIN_MIC,
++        DEVICE_IN_ANLG_DOCK_HEADSET = 0x80000000,
++        DEVICE_IN_PROXY = DEVICE_IN_ANLG_DOCK_HEADSET,
+ 
+         DEVICE_IN_ALL = (DEVICE_IN_COMMUNICATION | DEVICE_IN_AMBIENT | DEVICE_IN_BUILTIN_MIC |
+                 DEVICE_IN_BLUETOOTH_SCO_HEADSET | DEVICE_IN_WIRED_HEADSET | DEVICE_IN_AUX_DIGITAL |
+-                DEVICE_IN_VOICE_CALL | DEVICE_IN_BACK_MIC | DEVICE_IN_DEFAULT)
++                DEVICE_IN_VOICE_CALL | DEVICE_IN_BACK_MIC | DEVICE_IN_ANC_HEADSET |
++                DEVICE_IN_FM_RX | DEVICE_IN_FM_RX_A2DP | DEVICE_IN_DEFAULT |
++                DEVICE_IN_ANLG_DOCK_HEADSET | DEVICE_IN_PROXY)
+     };
+ 
+     // request to open a direct output with getOutput() (by opposition to sharing an output with other AudioTracks)
+-- 
+1.9.1
+

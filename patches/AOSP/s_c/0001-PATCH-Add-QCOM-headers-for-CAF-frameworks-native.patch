@@ -1,0 +1,25 @@
+From 49ea37fbf7cf803ee3ba284e2e9059530e05c2b0 Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 8 Aug 2014 21:35:23 +0200
+Subject: [PATCH 1/2] PATCH: Add QCOM headers for CAF frameworks/native
+
+---
+ include/system/window.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/system/window.h b/include/system/window.h
+index b8a19c8..42c2892 100644
+--- a/include/system/window.h
++++ b/include/system/window.h
+@@ -261,6 +261,8 @@ enum {
+     NATIVE_WINDOW_API_DISCONNECT            = 14,   /* private */
+     NATIVE_WINDOW_SET_BUFFERS_USER_DIMENSIONS = 15, /* private */
+     NATIVE_WINDOW_SET_POST_TRANSFORM_CROP   = 16,   /* private */
++    NATIVE_WINDOW_SET_BUFFERS_SIZE          = 17,   /* private */
++    NATIVE_WINDOW_UPDATE_BUFFERS_GEOMETRY   = 18,   /* private */
+ };
+ 
+ /* parameter for NATIVE_WINDOW_[API_][DIS]CONNECT */
+-- 
+1.9.1
+

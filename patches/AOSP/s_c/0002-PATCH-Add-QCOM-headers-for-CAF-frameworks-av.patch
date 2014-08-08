@@ -1,0 +1,354 @@
+From 5228048f6becc142ae135029307683530b7551ce Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 8 Aug 2014 21:52:34 +0200
+Subject: [PATCH 2/2] PATCH: Add QCOM headers for CAF frameworks/av
+
+---
+ include/system/audio.h  | 130 ++++++++++++++++++++++++++++++++++++++++++++++--
+ include/system/camera.h |  37 ++++++++++++++
+ 2 files changed, 164 insertions(+), 3 deletions(-)
+
+diff --git a/include/system/audio.h b/include/system/audio.h
+index da235dd..4e5be13 100644
+--- a/include/system/audio.h
++++ b/include/system/audio.h
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright (C) 2011 The Android Open Source Project
++ * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+@@ -31,6 +32,12 @@ __BEGIN_DECLS
+  * frameworks/base/include/media/AudioSystem.h
+  */
+ 
++#define AMR_FRAMESIZE 32
++#define QCELP_FRAMESIZE 35
++#define EVRC_FRAMESIZE 23
++#define AMR_WB_FRAMESIZE 61
++#define AAC_FRAMESIZE 2048
++
+ typedef int audio_io_handle_t;
+ 
+ /* Audio stream types */
+@@ -46,6 +53,7 @@ typedef enum {
+     AUDIO_STREAM_ENFORCED_AUDIBLE = 7, /* Sounds that cannot be muted by user and must be routed to speaker */
+     AUDIO_STREAM_DTMF             = 8,
+     AUDIO_STREAM_TTS              = 9,
++    AUDIO_STREAM_INCALL_MUSIC     = 10,
+ 
+     AUDIO_STREAM_CNT,
+     AUDIO_STREAM_MAX              = AUDIO_STREAM_CNT - 1,
+@@ -67,6 +75,8 @@ typedef enum {
+                                           /* An example of remote presentation is Wifi Display */
+                                           /*  where a dongle attached to a TV can be used to   */
+                                           /*  play the mix captured by this audio source.      */
++    AUDIO_SOURCE_FM_RX               = 9,
++    AUDIO_SOURCE_FM_RX_A2DP          = 10,
+     AUDIO_SOURCE_CNT,
+     AUDIO_SOURCE_MAX                 = AUDIO_SOURCE_CNT - 1,
+ } audio_source_t;
+@@ -141,6 +151,21 @@ typedef enum {
+     AUDIO_FORMAT_HE_AAC_V1           = 0x05000000UL,
+     AUDIO_FORMAT_HE_AAC_V2           = 0x06000000UL,
+     AUDIO_FORMAT_VORBIS              = 0x07000000UL,
++    AUDIO_FORMAT_EVRC                = 0x08000000UL,
++    AUDIO_FORMAT_QCELP               = 0x09000000UL,
++    AUDIO_FORMAT_AC3                 = 0x0a000000UL,
++    AUDIO_FORMAT_AC3_PLUS            = 0x0b000000UL,
++    AUDIO_FORMAT_DTS                 = 0x0c000000UL,
++    AUDIO_FORMAT_WMA                 = 0x0d000000UL,
++    AUDIO_FORMAT_WMA_PRO             = 0x0e000000UL,
++    AUDIO_FORMAT_AAC_ADIF            = 0x0f000000UL,
++    AUDIO_FORMAT_EVRCB               = 0x10000000UL,
++    AUDIO_FORMAT_EVRCWB              = 0x11000000UL,
++    AUDIO_FORMAT_EAC3                = 0x12000000UL,
++    AUDIO_FORMAT_DTS_LBR             = 0x13000000UL,
++    AUDIO_FORMAT_AMR_WB_PLUS         = 0x14000000UL,
++    AUDIO_FORMAT_MP2                 = 0x15000000UL,
++    AUDIO_FORMAT_EVRCNW              = 0x16000000UL,
+     AUDIO_FORMAT_MAIN_MASK           = 0xFF000000UL,
+     AUDIO_FORMAT_SUB_MASK            = 0x00FFFFFFUL,
+ 
+@@ -179,6 +204,9 @@ enum {
+     AUDIO_CHANNEL_OUT_MONO     = AUDIO_CHANNEL_OUT_FRONT_LEFT,
+     AUDIO_CHANNEL_OUT_STEREO   = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
+                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT),
++    AUDIO_CHANNEL_OUT_2POINT1  = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
++                                  AUDIO_CHANNEL_OUT_FRONT_RIGHT |
++                                  AUDIO_CHANNEL_OUT_FRONT_CENTER),
+     AUDIO_CHANNEL_OUT_QUAD     = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
+                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT |
+                                   AUDIO_CHANNEL_OUT_BACK_LEFT |
+@@ -187,12 +215,21 @@ enum {
+                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT |
+                                   AUDIO_CHANNEL_OUT_FRONT_CENTER |
+                                   AUDIO_CHANNEL_OUT_BACK_CENTER),
++    AUDIO_CHANNEL_OUT_PENTA =    (AUDIO_CHANNEL_OUT_QUAD |
++                                  AUDIO_CHANNEL_OUT_FRONT_CENTER),
+     AUDIO_CHANNEL_OUT_5POINT1  = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
+                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT |
+                                   AUDIO_CHANNEL_OUT_FRONT_CENTER |
+                                   AUDIO_CHANNEL_OUT_LOW_FREQUENCY |
+                                   AUDIO_CHANNEL_OUT_BACK_LEFT |
+                                   AUDIO_CHANNEL_OUT_BACK_RIGHT),
++    AUDIO_CHANNEL_OUT_6POINT1  = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
++                                  AUDIO_CHANNEL_OUT_FRONT_RIGHT |
++                                  AUDIO_CHANNEL_OUT_FRONT_CENTER |
++                                  AUDIO_CHANNEL_OUT_LOW_FREQUENCY |
++                                  AUDIO_CHANNEL_OUT_BACK_LEFT |
++                                  AUDIO_CHANNEL_OUT_BACK_RIGHT |
++                                  AUDIO_CHANNEL_OUT_BACK_CENTER),
+     // matches the correct AudioFormat.CHANNEL_OUT_7POINT1_SURROUND definition for 7.1
+     AUDIO_CHANNEL_OUT_7POINT1  = (AUDIO_CHANNEL_OUT_FRONT_LEFT |
+                                   AUDIO_CHANNEL_OUT_FRONT_RIGHT |
+@@ -236,10 +273,25 @@ enum {
+     AUDIO_CHANNEL_IN_Z_AXIS          = 0x2000,
+     AUDIO_CHANNEL_IN_VOICE_UPLINK    = 0x4000,
+     AUDIO_CHANNEL_IN_VOICE_DNLINK    = 0x8000,
++    AUDIO_CHANNEL_IN_FRONT_LEFT      = 0x10000,
++    AUDIO_CHANNEL_IN_FRONT_RIGHT     = 0x20000,
++    AUDIO_CHANNEL_IN_FRONT_CENTER    = 0x40000,
++    AUDIO_CHANNEL_IN_LOW_FREQUENCY   = 0x80000,
++    AUDIO_CHANNEL_IN_BACK_LEFT       = 0x100000,
++    AUDIO_CHANNEL_IN_BACK_RIGHT      = 0x200000,
+ 
+     AUDIO_CHANNEL_IN_MONO   = AUDIO_CHANNEL_IN_FRONT,
+     AUDIO_CHANNEL_IN_STEREO = (AUDIO_CHANNEL_IN_LEFT | AUDIO_CHANNEL_IN_RIGHT),
+     AUDIO_CHANNEL_IN_FRONT_BACK = (AUDIO_CHANNEL_IN_FRONT | AUDIO_CHANNEL_IN_BACK),
++    AUDIO_CHANNEL_IN_5POINT1 = (AUDIO_CHANNEL_IN_FRONT_LEFT |
++                               AUDIO_CHANNEL_IN_FRONT_RIGHT |
++                               AUDIO_CHANNEL_IN_FRONT_CENTER |
++                               AUDIO_CHANNEL_IN_LOW_FREQUENCY |
++                               AUDIO_CHANNEL_IN_BACK_LEFT |
++                               AUDIO_CHANNEL_IN_BACK_RIGHT),
++    AUDIO_CHANNEL_IN_VOICE_UPLINK_MONO = (AUDIO_CHANNEL_IN_VOICE_UPLINK | AUDIO_CHANNEL_IN_MONO),
++    AUDIO_CHANNEL_IN_VOICE_DNLINK_MONO = (AUDIO_CHANNEL_IN_VOICE_DNLINK | AUDIO_CHANNEL_IN_MONO),
++    AUDIO_CHANNEL_IN_VOICE_CALL_MONO   = (AUDIO_CHANNEL_IN_VOICE_UPLINK_MONO | AUDIO_CHANNEL_IN_VOICE_DNLINK_MONO),
+     AUDIO_CHANNEL_IN_ALL    = (AUDIO_CHANNEL_IN_LEFT |
+                                AUDIO_CHANNEL_IN_RIGHT |
+                                AUDIO_CHANNEL_IN_FRONT |
+@@ -253,7 +305,8 @@ enum {
+                                AUDIO_CHANNEL_IN_Y_AXIS |
+                                AUDIO_CHANNEL_IN_Z_AXIS |
+                                AUDIO_CHANNEL_IN_VOICE_UPLINK |
+-                               AUDIO_CHANNEL_IN_VOICE_DNLINK),
++                               AUDIO_CHANNEL_IN_VOICE_DNLINK |
++                               AUDIO_CHANNEL_IN_5POINT1),
+ };
+ 
+ typedef uint32_t audio_channel_mask_t;
+@@ -301,6 +354,11 @@ enum {
+     AUDIO_DEVICE_OUT_USB_ACCESSORY             = 0x2000,
+     AUDIO_DEVICE_OUT_USB_DEVICE                = 0x4000,
+     AUDIO_DEVICE_OUT_REMOTE_SUBMIX             = 0x8000,
++    AUDIO_DEVICE_OUT_ANC_HEADSET               = 0x10000,
++    AUDIO_DEVICE_OUT_ANC_HEADPHONE             = 0x20000,
++    AUDIO_DEVICE_OUT_PROXY                     = 0x40000,
++    AUDIO_DEVICE_OUT_FM                        = 0x80000,
++    AUDIO_DEVICE_OUT_FM_TX                     = 0x100000,
+     AUDIO_DEVICE_OUT_DEFAULT                   = AUDIO_DEVICE_BIT_DEFAULT,
+     AUDIO_DEVICE_OUT_ALL      = (AUDIO_DEVICE_OUT_EARPIECE |
+                                  AUDIO_DEVICE_OUT_SPEAKER |
+@@ -318,6 +376,11 @@ enum {
+                                  AUDIO_DEVICE_OUT_USB_ACCESSORY |
+                                  AUDIO_DEVICE_OUT_USB_DEVICE |
+                                  AUDIO_DEVICE_OUT_REMOTE_SUBMIX |
++                                 AUDIO_DEVICE_OUT_ANC_HEADSET |
++                                 AUDIO_DEVICE_OUT_ANC_HEADPHONE |
++                                 AUDIO_DEVICE_OUT_PROXY |
++                                 AUDIO_DEVICE_OUT_FM |
++                                 AUDIO_DEVICE_OUT_FM_TX |
+                                  AUDIO_DEVICE_OUT_DEFAULT),
+     AUDIO_DEVICE_OUT_ALL_A2DP = (AUDIO_DEVICE_OUT_BLUETOOTH_A2DP |
+                                  AUDIO_DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
+@@ -342,6 +405,10 @@ enum {
+     AUDIO_DEVICE_IN_DGTL_DOCK_HEADSET     = AUDIO_DEVICE_BIT_IN | 0x400,
+     AUDIO_DEVICE_IN_USB_ACCESSORY         = AUDIO_DEVICE_BIT_IN | 0x800,
+     AUDIO_DEVICE_IN_USB_DEVICE            = AUDIO_DEVICE_BIT_IN | 0x1000,
++    AUDIO_DEVICE_IN_ANC_HEADSET           = AUDIO_DEVICE_BIT_IN | 0x2000,
++    AUDIO_DEVICE_IN_PROXY                 = AUDIO_DEVICE_BIT_IN | 0x4000,
++    AUDIO_DEVICE_IN_FM_RX                 = AUDIO_DEVICE_BIT_IN | 0x8000,
++    AUDIO_DEVICE_IN_FM_RX_A2DP            = AUDIO_DEVICE_BIT_IN | 0x10000,
+     AUDIO_DEVICE_IN_DEFAULT               = AUDIO_DEVICE_BIT_IN | AUDIO_DEVICE_BIT_DEFAULT,
+ 
+     AUDIO_DEVICE_IN_ALL     = (AUDIO_DEVICE_IN_COMMUNICATION |
+@@ -357,6 +424,10 @@ enum {
+                                AUDIO_DEVICE_IN_DGTL_DOCK_HEADSET |
+                                AUDIO_DEVICE_IN_USB_ACCESSORY |
+                                AUDIO_DEVICE_IN_USB_DEVICE |
++                               AUDIO_DEVICE_IN_ANC_HEADSET |
++                               AUDIO_DEVICE_IN_FM_RX |
++                               AUDIO_DEVICE_IN_FM_RX_A2DP |
++                               AUDIO_DEVICE_IN_PROXY |
+                                AUDIO_DEVICE_IN_DEFAULT),
+     AUDIO_DEVICE_IN_ALL_SCO = AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET,
+ };
+@@ -383,7 +454,14 @@ typedef enum {
+                                         // controls related to voice calls.
+     AUDIO_OUTPUT_FLAG_FAST = 0x4,       // output supports "fast tracks",
+                                         // defined elsewhere
+-    AUDIO_OUTPUT_FLAG_DEEP_BUFFER = 0x8 // use deep audio buffers
++    AUDIO_OUTPUT_FLAG_DEEP_BUFFER = 0x8,// use deep audio buffers
++//Qualcomm Flags
++    AUDIO_OUTPUT_FLAG_LPA = 0x1000,      // use LPA
++    AUDIO_OUTPUT_FLAG_TUNNEL = 0x2000,   // use Tunnel
++    AUDIO_OUTPUT_FLAG_VOIP_RX = 0x4000,  // use this flag in combination with DIRECT to
++                                         // indicate HAL to activate EC & NS
++                                         // path for VOIP calls
++    AUDIO_OUTPUT_FLAG_INCALL_MUSIC = 0x8000 //use this flag for incall music delivery
+ } audio_output_flags_t;
+ 
+ static inline bool audio_is_output_device(audio_devices_t device)
+@@ -493,7 +571,7 @@ static inline audio_channel_mask_t audio_channel_out_mask_from_count(uint32_t ch
+     }
+ }
+ 
+-/* Similar to above, but for input.  Currently handles only mono and stereo. */
++/* Similar to above, but for input.  Currently handles mono and stereo and 5.1 input. */
+ static inline audio_channel_mask_t audio_channel_in_mask_from_count(uint32_t channel_count)
+ {
+     switch (channel_count) {
+@@ -501,6 +579,8 @@ static inline audio_channel_mask_t audio_channel_in_mask_from_count(uint32_t cha
+         return AUDIO_CHANNEL_IN_MONO;
+     case 2:
+         return AUDIO_CHANNEL_IN_STEREO;
++    case 6:
++        return AUDIO_CHANNEL_IN_5POINT1;
+     default:
+         return 0;
+     }
+@@ -521,6 +601,20 @@ static inline bool audio_is_valid_format(audio_format_t format)
+     case AUDIO_FORMAT_HE_AAC_V1:
+     case AUDIO_FORMAT_HE_AAC_V2:
+     case AUDIO_FORMAT_VORBIS:
++    case AUDIO_FORMAT_QCELP:
++    case AUDIO_FORMAT_EVRC:
++    case AUDIO_FORMAT_EVRCB:
++    case AUDIO_FORMAT_EVRCWB:
++    case AUDIO_FORMAT_AC3:
++    case AUDIO_FORMAT_EAC3:
++    case AUDIO_FORMAT_AAC_ADIF:
++    case AUDIO_FORMAT_WMA:
++    case AUDIO_FORMAT_WMA_PRO:
++    case AUDIO_FORMAT_DTS:
++    case AUDIO_FORMAT_DTS_LBR:
++    case AUDIO_FORMAT_AMR_WB_PLUS:
++    case AUDIO_FORMAT_MP2:
++    case AUDIO_FORMAT_EVRCNW:
+         return true;
+     default:
+         return false;
+@@ -532,6 +626,21 @@ static inline bool audio_is_linear_pcm(audio_format_t format)
+     return ((format & AUDIO_FORMAT_MAIN_MASK) == AUDIO_FORMAT_PCM);
+ }
+ 
++static inline bool audio_is_supported_compressed(audio_format_t format)
++{
++    if (format == AUDIO_FORMAT_AMR_NB ||
++        format == AUDIO_FORMAT_AMR_WB ||
++        format == AUDIO_FORMAT_EVRC ||
++        format == AUDIO_FORMAT_EVRCB ||
++        format == AUDIO_FORMAT_EVRCWB ||
++        format == AUDIO_FORMAT_EVRCNW ||
++        format == AUDIO_FORMAT_QCELP ||
++        format == AUDIO_FORMAT_AAC)
++        return true;
++    else
++        return false;
++}
++
+ static inline size_t audio_bytes_per_sample(audio_format_t format)
+ {
+     size_t size = 0;
+@@ -547,6 +656,21 @@ static inline size_t audio_bytes_per_sample(audio_format_t format)
+     case AUDIO_FORMAT_PCM_8_BIT:
+         size = sizeof(uint8_t);
+         break;
++    case AUDIO_FORMAT_AMR_NB:
++        size = 32;
++        break;
++    case AUDIO_FORMAT_EVRC:
++        size = 23;
++        break;
++    case AUDIO_FORMAT_QCELP:
++        size = 35;
++        break;
++    case AUDIO_FORMAT_AAC:
++        size = 2048;
++        break;
++    case AUDIO_FORMAT_AMR_WB:
++        size = 61;
++        break;
+     default:
+         break;
+     }
+diff --git a/include/system/camera.h b/include/system/camera.h
+index 7a4dd53..e4206f3 100644
+--- a/include/system/camera.h
++++ b/include/system/camera.h
+@@ -88,9 +88,18 @@ enum {
+     // Notify on autofocus start and stop. This is useful in continuous
+     // autofocus - FOCUS_MODE_CONTINUOUS_VIDEO and FOCUS_MODE_CONTINUOUS_PICTURE.
+     CAMERA_MSG_FOCUS_MOVE = 0x0800,       // notifyCallback
++    CAMERA_MSG_STATS_DATA = 0x1000,
++    CAMERA_MSG_META_DATA = 0x2000,
+     CAMERA_MSG_ALL_MSGS = 0xFFFF
+ };
+ 
++/** meta data type in CameraMetaDataCallback */
++enum {
++    CAMERA_META_DATA_ASD = 0x001,    //ASD data
++    CAMERA_META_DATA_FD = 0x002,     //FD/FP data
++    CAMERA_META_DATA_HDR = 0x003,    //Auto HDR data
++};
++
+ /** cmdType in sendCommand functions */
+ enum {
+     CAMERA_CMD_START_SMOOTH_ZOOM = 1,
+@@ -174,6 +183,21 @@ enum {
+      * count is non-positive or too big to be realized.
+      */
+     CAMERA_CMD_SET_VIDEO_BUFFER_COUNT = 10,
++
++    /**
++     * Commands to enable/disable preview histogram
++     *
++     * Based on user's input to enable/disable histogram from the camera
++     * UI, send the appropriate command to the HAL to turn on/off the histogram
++     * stats and start sending the data to the application.
++     */
++    CAMERA_CMD_HISTOGRAM_ON     = 11,
++    CAMERA_CMD_HISTOGRAM_OFF     = 12,
++    CAMERA_CMD_HISTOGRAM_SEND_DATA  = 13,
++    CAMERA_CMD_LONGSHOT_ON = 14,
++    CAMERA_CMD_LONGSHOT_OFF = 15,
++    CAMERA_CMD_METADATA_ON = 100,
++    CAMERA_CMD_METADATA_OFF = 101,
+ };
+ 
+ /** camera fatal errors */
+@@ -255,6 +279,19 @@ typedef struct camera_face {
+      */
+     int32_t mouth[2];
+ 
++    int32_t smile_degree;
++    int32_t smile_score;
++    int32_t blink_detected;
++    int32_t face_recognised;
++    int32_t gaze_angle;
++    int32_t updown_dir;
++    int32_t leftright_dir;
++    int32_t roll_dir;
++    int32_t left_right_gaze;
++    int32_t top_bottom_gaze;
++    int32_t leye_blink;
++    int32_t reye_blink;
++
+ } camera_face_t;
+ 
+ /**
+-- 
+1.9.1
+

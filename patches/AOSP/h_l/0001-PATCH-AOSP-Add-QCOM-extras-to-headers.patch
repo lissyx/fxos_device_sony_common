@@ -1,0 +1,89 @@
+From c5d502c126a8862b718f17cf6bb51512e5e7f16f Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Fri, 8 Aug 2014 14:59:11 +0200
+Subject: [PATCH] PATCH: AOSP: Add QCOM extras to headers
+
+---
+ include/hardware/gralloc.h         | 19 +++++++++++++++++++
+ include/hardware/hwcomposer_defs.h |  8 +++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/include/hardware/gralloc.h b/include/hardware/gralloc.h
+index 9c62242..f33a548 100644
+--- a/include/hardware/gralloc.h
++++ b/include/hardware/gralloc.h
+@@ -125,6 +125,12 @@ enum {
+     GRALLOC_USAGE_PRIVATE_MASK          = 0xF0000000,
+ };
+ 
++enum {
++    /* Gralloc perform enums */
++    GRALLOC_MODULE_PERFORM_UPDATE_BUFFER_GEOMETRY = 0,
++    GRALLOC_MODULE_PERFORM_PRIVATE_START
++};
++
+ /*****************************************************************************/
+ 
+ /**
+@@ -252,6 +258,19 @@ typedef struct gralloc_module_t {
+ typedef struct alloc_device_t {
+     struct hw_device_t common;
+ 
++    /*
++     * (*allocSize)() Allocates a buffer in graphic memory with the requested
++     * bufferSize parameter and returns a buffer_handle_t and the stride in
++     * pixels to allow the implementation to satisfy hardware constraints on
++     * the width of a pixmap (eg: it may have to be multiple of 8 pixels).
++     * The CALLER TAKES OWNERSHIP of the buffer_handle_t.
++     *
++     * Returns 0 on success or -errno on error.
++     */
++    int (*allocSize)(struct alloc_device_t* dev,
++            int w, int h, int format, int usage,
++            buffer_handle_t* handle, int* stride, int bufferSize);
++
+     /* 
+      * (*alloc)() Allocates a buffer in graphic memory with the requested
+      * parameters and returns a buffer_handle_t and the stride in pixels to
+diff --git a/include/hardware/hwcomposer_defs.h b/include/hardware/hwcomposer_defs.h
+index 1edfd3d..ae4c1eb 100644
+--- a/include/hardware/hwcomposer_defs.h
++++ b/include/hardware/hwcomposer_defs.h
+@@ -75,6 +75,7 @@ enum {
+      * by SurfaceFlinger (just as if compositionType was set to HWC_OVERLAY).
+      */
+     HWC_SKIP_LAYER = 0x00000001,
++    HWC_SCREENSHOT_ANIMATOR_LAYER = 0x00000002,
+ };
+ 
+ /*
+@@ -94,6 +95,9 @@ enum {
+     /* this layer holds the result of compositing the HWC_FRAMEBUFFER layers.
+      * Added in HWC_DEVICE_API_VERSION_1_1. */
+     HWC_FRAMEBUFFER_TARGET = 3,
++
++    /* this layer will be handled in the HWC, using a blit engine */
++    HWC_BLIT = 4,
+ };
+ 
+ /*
+@@ -174,13 +178,15 @@ enum {
+ 
+ /* Allowed events for hwc_methods::eventControl() */
+ enum {
+-    HWC_EVENT_VSYNC     = 0
++    HWC_EVENT_VSYNC     = 0,
++    HWC_EVENT_ORIENTATION
+ };
+ 
+ /* Display types and associated mask bits. */
+ enum {
+     HWC_DISPLAY_PRIMARY     = 0,
+     HWC_DISPLAY_EXTERNAL    = 1,    // HDMI, DP, etc.
++    HWC_DISPLAY_VIRTUAL     = 2,    // WFD etc.
+     HWC_NUM_DISPLAY_TYPES
+ };
+ 
+-- 
+1.9.1
+
