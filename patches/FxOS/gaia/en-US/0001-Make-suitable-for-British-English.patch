@@ -1,0 +1,291 @@
+From c1d8a6be12d374814f3cd9d290fcbc55c602089c Mon Sep 17 00:00:00 2001
+From: Adam Farden <adam@farden.cz>
+Date: Sat, 9 Aug 2014 15:16:51 +0200
+Subject: [PATCH] Make suitable for British English
+
+---
+ apps/calendar/calendar.properties                            |  6 +++---
+ apps/clock/clock.properties                                  |  2 +-
+ apps/communications/contacts/contacts.properties             | 12 ++++++------
+ apps/communications/dialer/dialer.properties                 |  2 +-
+ apps/costcontrol/costcontrol.properties                      |  4 ++--
+ apps/ftu/ftu.properties                                      |  2 +-
+ apps/homescreen/homescreen.properties                        |  4 ++--
+ apps/settings/settings.properties                            | 10 +++++-----
+ apps/sms/sms.properties                                      |  2 +-
+ apps/system/system.properties                                |  6 +++---
+ .../collection_categories/collection_categories.properties   |  2 +-
+ shared/date/date.properties                                  |  4 ++--
+ 12 files changed, 28 insertions(+), 28 deletions(-)
+
+diff --git a/apps/calendar/calendar.properties b/apps/calendar/calendar.properties
+index 8b21d31..b9a5e92 100644
+--- a/apps/calendar/calendar.properties
++++ b/apps/calendar/calendar.properties
+@@ -215,13 +215,13 @@ current-time=%I:%M
+ multi-month-view-header-format=%b %Y
+ 
+ # Header format used for in the day view.
+-day-view-header-format=%b %e, %A
++day-view-header-format=%A %e %B
+ 
+ # Header used on month view before the event list (selected day date)
+-months-day-view-header-format=%A, %b %e
++months-day-view-header-format=%A, %e %b
+ 
+ # Date format in the event detail view.
+-longDateFormat=%A, %B %d, %Y
++longDateFormat=%A, %d %B, %Y
+ 
+ #errors
+ error-start-after-end=End date must come after start date
+diff --git a/apps/clock/clock.properties b/apps/clock/clock.properties
+index bcbcd19..78eb12a 100644
+--- a/apps/clock/clock.properties
++++ b/apps/clock/clock.properties
+@@ -51,7 +51,7 @@ vibrateOff = Off
+ plusMinute = +1 Min
+ 
+ # see http://www.cplusplus.com/reference/clibrary/ctime/strftime/
+-dateFormat = %A, %B %e
++dateFormat = %A, %e %B
+ 
+ countdown-lessThanAnHour = The alarm is set for <strong>{{minutes}}</strong> from now.
+ countdown-moreThanAnHour = The alarm is set for {{hours}} {{minutes}} from now.
+diff --git a/apps/communications/contacts/contacts.properties b/apps/communications/contacts/contacts.properties
+index ae12c80..444198c 100755
+--- a/apps/communications/contacts/contacts.properties
++++ b/apps/communications/contacts/contacts.properties
+@@ -39,7 +39,7 @@ carrier.placeholder       = Carrier
+ email                     = Email
+ email.placeholder         = Email
+ streetAddress.placeholder = Street
+-postalCode.placeholder    = Zip code
++postalCode.placeholder    = Post code
+ locality.placeholder      = City
+ countryName.placeholder   = Country
+ comment.placeholder       = Comment
+@@ -50,8 +50,8 @@ date.placeholder          = Date
+ 
+ birthday                  = Birthday
+ # see http://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+-dateFormat                = %B %e
+-dateOutput                = {{dayMonthFormatted}} {{year}}
++dateFormat                = %e %B
++’
+ 
+ anniversary               = Anniversary
+ 
+@@ -62,8 +62,8 @@ addEmail       = Add Email
+ addAddress     = Add Address
+ addDate        = Add Date
+ addComment     = Add Comment
+-addFavorite    = Add as Favorite
+-removeFavorite = Remove as Favorite
++addFavorite    = Add as Favourite
++removeFavorite = Remove as Favourite
+ 
+ # Hidden information, for screen readers
+ exit             = Exit
+@@ -74,7 +74,7 @@ labelPhoneNumber = Phone number:
+ labelCarrier     = Carrier:
+ labelEmail       = Email:
+ labelStreet      = Street:
+-labelZip         = Zip code:
++labelZip         = Post code:
+ labelCity        = City:
+ labelCountry     = Country:
+ labelComment     = Comment:
+diff --git a/apps/communications/dialer/dialer.properties b/apps/communications/dialer/dialer.properties
+index 7830c51..39863e8 100644
+--- a/apps/communications/dialer/dialer.properties
++++ b/apps/communications/dialer/dialer.properties
+@@ -216,7 +216,7 @@ conferenceAddError = Unable to merge calls
+ conferenceRemoveError = Unable to unmerge calls
+ 
+ # date string. see http://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+-longDateFormat=%A, %B %e
++longDateFormat=%A, %e %B
+ 
+ # Bluetooth menu
+ select-audio-sources=Select audio sources
+diff --git a/apps/costcontrol/costcontrol.properties b/apps/costcontrol/costcontrol.properties
+index 178bb4a..6cc5767 100644
+--- a/apps/costcontrol/costcontrol.properties
++++ b/apps/costcontrol/costcontrol.properties
+@@ -95,7 +95,7 @@ plantype-setup-title = My phone and Internet plan is
+ prepaid = Prepaid
+ postpaid = Postpaid
+ phoneactivity = Phone activity
+-short-date-format = %b, %d
++short-date-format = %d, %b
+ sms-sent = SMS sent
+ call-made = Calls made
+ settings = Settings
+@@ -165,7 +165,7 @@ internet = Internet
+ phone = Phone
+ loading-interface-data = Loading interface data. Please retry in a while.
+ 
+-verbose-chart-date-format = {{em-month}} {{monthday-number}}
++verbose-chart-date-format = {{monthday-number}} {{em-month}}
+ 
+ # Specif format for CC, string in format Today|Yesterday|<WeekDay>, hh:mm
+ day-hour-format = {{day}}, {{time}}
+diff --git a/apps/ftu/ftu.properties b/apps/ftu/ftu.properties
+index 51af524..3ab0021 100644
+--- a/apps/ftu/ftu.properties
++++ b/apps/ftu/ftu.properties
+@@ -115,7 +115,7 @@ language=Language
+ # 3g
+ #=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+ 
+-3g = Cellular Data
++3g = Mobile Data
+ dataConnection = Enable Data
+ dataConnectionInfo = Enabling data connection now will allow you to set up your phone without a Wi-Fi connection. You may also enable it later on in Settings. Just make sure you have a data plan with your carrier to avoid potentially hefty charges.
+ caution = Warning
+diff --git a/apps/homescreen/homescreen.properties b/apps/homescreen/homescreen.properties
+index c3a2c60..d0668f0 100644
+--- a/apps/homescreen/homescreen.properties
++++ b/apps/homescreen/homescreen.properties
+@@ -17,7 +17,7 @@ remove-body=Remove {{name}} from the homescreen?
+ remove=Remove
+ 
+ # Landing
+-longDateFormat=%A, %B %e
++longDateFormat=%A, %e %B
+ 
+ # App reinstall
+ download=Download
+@@ -93,7 +93,7 @@ evme-connectionmessage-apps-has-installed=Connect to the internet to get even mo
+ 
+ # tips are shown throughout the app on certain actions
+ evme-tips-app-explain.innerHTML=Find the things you love with the coolest apps.
+-evme-tips-searchbar-focus.innerHTML=For example, find your favorite singer or band…
++evme-tips-searchbar-focus.innerHTML=For example, find your favourite singer or band…
+ evme-tips-exact-results.innerHTML=These are the apps for <b>{{query}}</b>,<br /><br /> tap any icon to open it.
+ 
+ # collection translations
+diff --git a/apps/settings/settings.properties b/apps/settings/settings.properties
+index 49dfd84..63fb64a 100644
+--- a/apps/settings/settings.properties
++++ b/apps/settings/settings.properties
+@@ -130,7 +130,7 @@ wpsMessage=Connect with WPS
+ # in headers, you can use a shorter string here.
+ wpsMessage-header={{wpsMessage}}
+ fullStatus-wps-inprogress = WPS is in progress…
+-fullStatus-wps-canceled   = WPS was canceled
++fullStatus-wps-canceled   = WPS was cancelled
+ fullStatus-wps-timedout   = WPS timed out
+ fullStatus-wps-failed-error = WPS failed [{{error}}]
+ fullStatus-wps-overlapped = Another WPS PBC AP was found
+@@ -272,7 +272,7 @@ messaging-SMSC = Service Center
+ unknown-SMSC = Info not available
+ 
+ # Connectivity :: Cellular & Data
+-cellularAndData=Cellular & Data
++cellularAndData=Mobile & Data
+ # LOCALIZATION NOTE (cellularAndData-header): if you leave the original
+ # en-US value "{{cellularAndData}}" in the following string, the localization
+ # will be automatically picked from the existing string with ID "cellularAndData".
+@@ -581,7 +581,7 @@ language-header={{language}}
+ region=Region
+ sample-format=Sample Format
+ # see http://www.cplusplus.com/reference/clibrary/ctime/strftime/
+-longDateFormat=%A, %B %d, %Y
++longDateFormat=%A, %d %B %Y
+ 
+ # Personalization :: Sim cards manager
+ simManager=SIM manager
+@@ -792,7 +792,7 @@ simPinWithIndex=SIM {{index}} PIN
+ pukCode=PUK code
+ puk2Code=PUK2 code
+ whatIsSimPin=What is a SIM PIN?
+-simPinIntro1=A SIM PIN prevents access to the SIM card cellular data networks. When it’s enabled, any device containing the SIM card will request the PIN upon restart.
++simPinIntro1=A SIM PIN prevents access to the SIM card mobile data networks. When it’s enabled, any device containing the SIM card will request the PIN upon restart.
+ simPinIntro2=A SIM PIN is not the same as the passcode used to unlock the device.
+ changeSimPin=Change PIN
+ simPinChangedSuccessfully=SIM PIN changed successfully
+@@ -1138,7 +1138,7 @@ accessibility=Accessibility
+ # If you need to adapt your localization to the reduced space available
+ # in headers, you can use a shorter string here.
+ accessibility-header={{accessibility}}
+-invertColors=Invert colors
++invertColors=Invert colours
+ screenReader=Screen reader
+ showA11ySettings=Show accessibility settings
+ screenReader-enable-msg = When the screen reader is enabled, your device will provide spoken feedback to assist blind and low-vision users.
+diff --git a/apps/sms/sms.properties b/apps/sms/sms.properties
+index 67fc7c7..e5067d9 100755
+--- a/apps/sms/sms.properties
++++ b/apps/sms/sms.properties
+@@ -261,6 +261,6 @@ send-button-sim-indication.ariaLabel = using SIM {{n}}
+ # %A is the full weekday name from shared/date/date.properties and it might
+ # not be in the correct grammatical case. To work around this issue, you can
+ # use a different format like "%m/%d/%Y".
+-expiry-date-format = %A, %b %e
++expiry-date-format = %A, %e %b
+ 
+ attach-button.ariaLabel = Add attachment
+diff --git a/apps/system/system.properties b/apps/system/system.properties
+index 28e0837..ee5b7f1 100644
+--- a/apps/system/system.properties
++++ b/apps/system/system.properties
+@@ -53,7 +53,7 @@ utilityTrayGrippy.ariaLabel=Close utility tray
+ # status bar text label
+ statusbarLabel={{date}}, {{operator}}
+ # see http://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+-statusbarDateFormat=%b %e
++statusbarDateFormat=%e %b
+ # The following statusbar messages are for screen reader accessibility.
+ statusbar.ariaLabel=Status Bar
+ statusbarBattery=Battery {{level}} percent
+@@ -251,7 +251,7 @@ emergency-call=Emergency Call
+ unlock-a11y-button.ariaLabel=Unlock
+ camera-a11y-button.ariaLabel=Camera
+ # see http://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+-longDateFormat=%A, %B %e
++longDateFormat=%A, %e %B
+ # LOCALIZATION NOTE(panel-passcode.ariaLabel): The following string is spoken by
+ # screen readers and not shown on the screen.
+ panel-passcode.ariaLabel = Passcode panel
+@@ -410,7 +410,7 @@ hnckcode=HNCK code
+ rcckcode=RCCK code
+ rspckcode=RSPCK code
+ whatIsSimPin=What is a SIM PIN?
+-simPinIntro1=A SIM PIN prevents access to the SIM card cellular data networks. When it’s enabled, any device containing the SIM card will request the PIN upon restart.
++simPinIntro1=A SIM PIN prevents access to the SIM card mobile data networks. When it’s enabled, any device containing the SIM card will request the PIN upon restart.
+ simPinIntro2=A SIM PIN is not the same as the passcode used to unlock the device.
+ changeSimPin=Change PIN
+ pinTitle=Enter SIM PIN
+diff --git a/shared/collection_categories/collection_categories.properties b/shared/collection_categories/collection_categories.properties
+index 348e9c1..b508d44 100644
+--- a/shared/collection_categories/collection_categories.properties
++++ b/shared/collection_categories/collection_categories.properties
+@@ -50,7 +50,7 @@ collection-categoryId-368=Personalization
+ collection-categoryId-372=Transportation
+ collection-categoryId-373=Telecommunication
+ collection-categoryId-376=Entertainment
+-collection-categoryId-377=Soccer
++collection-categoryId-377=Football
+ collection-categoryId-381=Religion
+ collection-categoryId-382=Fitness
+ collection-categoryId-387=Outdoor Activities
+diff --git a/shared/date/date.properties b/shared/date/date.properties
+index a22af18..5476bb0 100644
+--- a/shared/date/date.properties
++++ b/shared/date/date.properties
+@@ -194,8 +194,8 @@ incorrectDate = (incorrect date)
+ # Date/Time format
+ # see http://pubs.opengroup.org/onlinepubs/007908799/xsh/strftime.html
+ 
+-dateTimeFormat_%c = %a %b %e %Y %I:%M:%S %p
+-dateTimeFormat_%x = %m/%d/%Y
++dateTimeFormat_%c = %a %e %b %Y %I:%M:%S %p
++dateTimeFormat_%x = %d/%m/%Y
+ dateTimeFormat_%X = %I:%M:%S %p
+ 
+ shortTimeFormat = %I:%M %p
+-- 
+1.9.1
+
